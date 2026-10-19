@@ -1,1 +1,217 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gifts Hamper Box | Tracking</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,sans-serif;
+  background:#090b10;color:#fff;
+  min-height:100vh;padding:22px 14px;
+}
+.container{max-width:650px;margin:auto}
+.brand{text-align:center;margin:15px 0 28px}
+.logo{font-size:35px;color:#e8c879}
+.brand h1{letter-spacing:3px;font-size:23px;margin:10px 0}
+.brand p{color:#aaa;font-size:13px}
+.card{
+  background:linear-gradient(145deg,#1b1d25,#101116);
+  border:1px solid #34313a;border-radius:20px;
+  padding:23px;margin-bottom:18px;
+  box-shadow:0 12px 35px #0006;
+}
+h2{font-size:19px;margin-bottom:9px}
+.muted{color:#aaa;font-size:13px;line-height:1.6}
+input,button{
+  width:100%;padding:15px;border-radius:10px;
+  font-size:15px;margin-top:14px;
+}
+input{
+  background:#090b10;color:white;
+  border:1px solid #49434b;outline:none;
+}
+input:focus{border-color:#e8c879}
+button{
+  background:linear-gradient(90deg,#b88b35,#f5df9a);
+  color:#17130a;font-weight:bold;border:0;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
+.hidden{display:none}
+.badge{
+  display:inline-block;color:#f5dc91;
+  background:#5b471b55;border:1px solid #b89545;
+  padding:8px 12px;border-radius:30px;
+  font-size:12px;margin:10px 0;
+}
+.info{
+  display:flex;justify-content:space-between;
+  gap:15px;padding:13px 0;
+  border-bottom:1px solid #333;
+}
+.info span:first-child{color:#aaa;font-size:13px}
+.info span:last-child{text-align:right;font-size:13px;overflow-wrap:anywhere}
+.timeline{margin-top:20px}
+.step{display:flex;gap:14px;min-height:67px}
+.dot{
+  width:17px;height:17px;border-radius:50%;
+  background:#e8c879;flex-shrink:0;margin-top:2px;
+  box-shadow:0 0 12px #e8c87955;
+}
+.pending{background:#393939;box-shadow:none}
+.step h3{font-size:14px;margin-bottom:6px}
+.step p{font-size:12px;color:#aaa}
+.error{color:#ff9999;margin-top:14px;font-size:13px}
+footer{text-align:center;color:#777;font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="brand">
+    <div class="logo">✦</div>
+    <h1>GIFTS HAMPER BOX</h1>
+    <p>PREMIUM PACKAGING · SPECIAL MOMENTS</p>
+  </header>
+
+  <section class="card">
+    <h2>📦 Track Your Order</h2>
+    <p class="muted">
+      Enter your tracking code below to check your
+      order status and expected delivery details.
+    </p>
+
+    <input id="trackingCode"
+      placeholder="Enter Tracking Code"
+      autocomplete="off">
+
+    <button onclick="trackOrder()">TRACK ORDER →</button>
+    <p id="error" class="error"></p>
+  </section>
+
+  <section id="result" class="card hidden">
+    <p class="muted">ORDER TRACKING DETAILS</p>
+    <h2 id="customerName" style="margin-top:10px"></h2>
+    <span class="badge" id="statusBadge"></span>
+
+    <div class="info">
+      <span>Tracking Code</span>
+      <span id="code"></span>
+    </div>
+    <div class="info">
+      <span>Current Status</span>
+      <span id="status"></span>
+    </div>
+    <div class="info">
+      <span>Expected Delivery</span>
+      <span id="delivery"></span>
+    </div>
+    <div class="info">
+      <span>Delivery Time</span>
+      <span id="deliveryTime"></span>
+    </div>
+    <div class="info">
+      <span>Delivery Address</span>
+      <span id="address"></span>
+    </div>
+
+    <div class="timeline">
+      <h2 style="margin-bottom:20px">Order Journey</h2>
+      <div id="steps"></div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Gifts Hamper Box · Made with ♥
+  </footer>
+</div>
+
+<script>
+// DEMO RECORD — Add more records here as needed.
+const orders = {
+  "TRACK0013738": {
+    name: "Noorein",
+    status: "Order Packed",
+    delivery: "22 October 2026",
+    time: "2:00 PM – 3:00 PM",
+    address: "Hyderabad, Telangana 500028, India",
+    completed: 2
+  }
+};
+
+const stages = [
+  "Order Confirmed",
+  "Order Packed",
+  "Shipped",
+  "Out for Delivery",
+  "Delivered"
+];
+
+function trackOrder() {
+  const code = document.getElementById("trackingCode")
+    .value.trim().toUpperCase();
+
+  const order = orders[code];
+  const error = document.getElementById("error");
+  const result = document.getElementById("result");
+
+  error.textContent = "";
+  result.classList.add("hidden");
+
+  if (!code) {
+    error.textContent = "Please enter your tracking code.";
+    return;
+  }
+
+  if (!order) {
+    error.textContent =
+      "Tracking code not found. Please check and try again.";
+    return;
+  }
+
+  document.getElementById("customerName").textContent =
+    order.name;
+  document.getElementById("statusBadge").textContent =
+    order.status.toUpperCase();
+  document.getElementById("code").textContent = code;
+  document.getElementById("status").textContent =
+    order.status;
+  document.getElementById("delivery").textContent =
+    order.delivery;
+  document.getElementById("deliveryTime").textContent =
+    order.time;
+  document.getElementById("address").textContent =
+    order.address;
+
+  const currentIndex = stages.indexOf(order.status);
+  const completed = currentIndex >= 0
+    ? currentIndex + 1
+    : (order.completed || 0);
+
+  document.getElementById("steps").innerHTML =
+    stages.map((stage, index) => `
+      <div class="step">
+        <div class="dot ${index < completed ? "" : "pending"}"></div>
+        <div>
+          <h3>${stage}</h3>
+          <p>${index < completed
+            ? "Completed"
+            : "Awaiting update"}</p>
+        </div>
+      </div>
+    `).join("");
+
+  result.classList.remove("hidden");
+}
+
+document.getElementById("trackingCode")
+  .addEventListener("keydown", function(event) {
+    if (event.key === "Enter") trackOrder();
+  });
+</script>
+</body>
+</html>
